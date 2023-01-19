@@ -7,20 +7,101 @@ import ttkthemes  # here this module is being used for the button
 from tkinter import ttk
 import pandas
 import pymysql
+import random
+
+
+
+def Pay(seatN,pn):
+
+    tick_ent.destroy()
+    Payment_ent = ttkthemes.ThemedTk()
+    Payment_ent.get_themes()
+    Payment_ent.set_theme('radiance')
+    Payment_ent.title("PAYMENT PAGE")
+    Payment_ent.geometry("800x450+50+50")
+    Payment_ent.resizable(0, 0)
+    Payment_ent.iconbitmap('trainlogo.ico')
+    Payment_ent.config(bg='black')
+
+    # Create the two frames
+    frame0 = Frame(Payment_ent, background='black')
+    frame1 = Frame(Payment_ent, background='grey')
+
+    # Pack the frames onto the window
+    frame0.pack(pady=10, padx=10, side=TOP, fill=BOTH)
+    frame1.pack(pady=10, padx=10, side=LEFT, expand=TRUE, fill=BOTH)
+
+    # Add some widgets to the frames
+    label0 = Label(frame0, text="PAYMENT ENTRIES", font=('times new roman', 30, 'bold'), bg='black',
+                   fg='white')
+    label0.pack(padx=20, pady=20)
+
+    # *****************************************************************************
+    # -------------------------------------------------------------------------------
+
+    amt_label = Label(frame1, bg='grey', text='Amount', font=('times new roman', 25, 'bold'))
+    amt_label.grid(row=0, column=0, padx=30, pady=15, sticky=W)
+    amt_Entry = Entry(frame1, foreground='black', font=('Consolas', 15, 'bold'), width=24)
+    amt_Entry.grid(row=0, column=1, pady=15, padx=10)
+
+    Bank_label = Label(frame1, bg='grey', text='Bank', font=('times new roman', 25, 'bold'))
+    Bank_label.grid(row=1, column=0, padx=30, pady=15, sticky=W)
+    Bank_Entry = Entry(frame1, foreground='black', font=('Consolas', 15, 'bold'), width=24)
+    Bank_Entry.grid(row=1, column=1, pady=15, padx=10)
+
+    # -------------------------------------------------------------------------------
+    card_label = Label(frame1, bg='grey', text='Card_No', font=('times new roman', 25, 'bold'))
+    card_label.grid(row=2, column=0, padx=30, pady=15, sticky=W)
+    card_Entry = Entry(frame1, foreground='black', font=('Consolas', 15, 'bold'), width=24)
+    card_Entry.grid(row=2, column=1, pady=15, padx=10)
+
+    # -------------------------------------------------------------------------------
+    pnr_label = Label(frame1, bg='grey', text='Pnr_no', font=('times new roman', 25, 'bold'))
+    pnr_label.grid(row=3, column=0, padx=30, pady=15, sticky=W)
+    pnr_Entry = Entry(frame1, foreground='black', font=('Consolas', 15, 'bold'), width=24)
+    pnr_Entry.grid(row=3, column=1, pady=15, padx=10)
+    # -------------------------------------------------------------------------------
+    pnr_Entry.insert(0, pn)
+    pnr_Entry.config(state=DISABLED)
 
 
 
 
-def Pay():
-    import Payment
+def jhi(unams, seatnams):
 
-
-def jhi():
     cont_win.destroy()
     update_win.destroy()
     ad_ent.destroy()
-    print(listdata)
+    global pnr_Entry
+
+#//////lobal user_Entry///////////////////////////////////////////////////
+    li = range(0, 100)
+    # we use this list to get non-repeating elemets
+    hi = random.sample(li, 1)
+    pnrno = ' '.join(map(str, hi))
+
+
+
+    try:
+        query = 'insert into ticket values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+        mycursor.execute(query, (str(pnrno), listdata[0],
+                                 listdata[1], listdata[2],
+                                 listdata[3], listdata[4],
+                                 listdata[5], listdata[6],
+                                 listdata[7], str(unams)
+                                 ))
+        con.commit()
+        messagebox.showinfo("Success status","Successfully terminated")
+    except:
+        messagebox.showerror("Error", "Ticket details couldnt be added")
+        return
+
+    sel_train = listdata[0]
+
+    ghi = seatnams
+
     # Create the main window
+    global tick_ent
     tick_ent = ttkthemes.ThemedTk()
     tick_ent.get_themes()
     tick_ent.set_theme('radiance')
@@ -43,59 +124,78 @@ def jhi():
 
 
     # Add some widgets to the frames
-    label0 = Label(frame0, text="TRAIN TICKET INFORMATION", font=('times new roman', 40, 'bold'), bg='black',
+    label0 = Label(frame0, text="TRAIN TICKET INFORMATION", font=('times new roman', 20, 'bold'), bg='black',
                    fg='white')
     label0.pack(padx=20, pady=20)
 
    # *****************************************************************************
     # -------------------------------------------------------------------------------
-    No_label = Label(frame1, bg='grey',text='Train_no', font=('times new roman', 20, 'bold'))
-    No_label.grid(row=0, column=0, padx=30, pady=15, sticky=W)
+
+
+    pnr_label = Label(frame1, bg='grey', text='Pnr_no', font=('times new roman', 15, 'bold'))
+    pnr_label.grid(row=0, column=0, padx=30, pady=15, sticky=W)
+
+    pnr_Entry = Entry(frame1, foreground='black', font=('Consolas', 15, 'bold'), width=24)
+    pnr_Entry.grid(row=0, column=1, pady=15, padx=10)
+
+
+    No_label = Label(frame1, bg='grey',text='Train_no', font=('times new roman', 15, 'bold'))
+    No_label.grid(row=1, column=0, padx=30, pady=15, sticky=W)
     No_Entry = Entry(frame1,foreground='black', font=('Consolas', 15, 'bold'), width=24)
-    No_Entry.grid(row=0, column=1, pady=15, padx=10)
+    No_Entry.grid(row=1, column=1, pady=15, padx=10)
 
     # -------------------------------------------------------------------------------
-    Tn_label = Label(frame1, bg='grey', text='Train_name', font=('times new roman', 20, 'bold'))
-    Tn_label.grid(row=1, column=0, padx=30, pady=15, sticky=W)
+    Tn_label = Label(frame1, bg='grey', text='Train_name', font=('times new roman', 15, 'bold'))
+    Tn_label.grid(row=2 ,column=0, padx=30, pady=15, sticky=W)
     Tn_Entry = Entry(frame1,foreground='black', font=('Consolas', 15, 'bold'), width=24)
-    Tn_Entry.grid(row=1, column=1, pady=15, padx=10)
+    Tn_Entry.grid(row=2, column=1, pady=15, padx=10)
 
     # -------------------------------------------------------------------------------
-    src_label = Label(frame1,bg='grey', text='Source', font=('times new roman', 20, 'bold'))
-    src_label.grid(row=2, column=0, padx=30, pady=15, sticky=W)
+    src_label = Label(frame1,bg='grey', text='Source', font=('times new roman', 15, 'bold'))
+    src_label.grid(row=3, column=0, padx=30, pady=15, sticky=W)
     src_Entry = Entry(frame1,foreground='black', font=('Consolas', 15, 'bold'), width=24)
-    src_Entry.grid(row=2, column=1, pady=15, padx=10)
+    src_Entry.grid(row=3, column=1, pady=15, padx=10)
     # -------------------------------------------------------------------------------
-    dest_label = Label(frame1,bg='grey', text='Destination', font=('times new roman', 20, 'bold'))
-    dest_label.grid(row=3, column=0, padx=30, pady=15, sticky=W)
+    dest_label = Label(frame1,bg='grey', text='Destination', font=('times new roman', 15, 'bold'))
+    dest_label.grid(row=4, column=0, padx=30, pady=15, sticky=W)
     dest_Entry = Entry(frame1,foreground='black', font=('Consolas', 15, 'bold'), width=24)
-    dest_Entry.grid(row=3, column=1, pady=15, padx=10)
+    dest_Entry.grid(row=4, column=1, pady=15, padx=10)
     # -------------------------------------------------------------------------------
-    at_label = Label(frame1,bg='grey', text='Arrival_time', font=('times new roman', 20, 'bold'))
-    at_label.grid(row=4, column=0, padx=30, pady=15, sticky=W)
+    at_label = Label(frame1,bg='grey', text='Arrival_time', font=('times new roman', 15, 'bold'))
+    at_label.grid(row=5, column=0, padx=30, pady=15, sticky=W)
     at_Entry = Entry(frame1,foreground='black', font=('Consolas', 15, 'bold'), width=24)
-    at_Entry.grid(row=4, column=1, pady=15, padx=10)
+    at_Entry.grid(row=5, column=1, pady=15, padx=10)
     # -------------------------------------------------------------------------------
-    dt_label = Label(frame1,bg='grey', text='Departure_time', font=('times new roman', 20, 'bold'))
-    dt_label.grid(row=5, column=0, padx=30, pady=15, sticky=W)
+    dt_label = Label(frame1,bg='grey', text='Departure_time', font=('times new roman', 15, 'bold'))
+    dt_label.grid(row=6, column=0, padx=30, pady=15, sticky=W)
     dt_Entry = Entry(frame1,foreground='black', font=('Consolas', 15, 'bold'), width=24)
-    dt_Entry.grid(row=5, column=1, pady=15, padx=10)
+    dt_Entry.grid(row=6, column=1, pady=15, padx=10)
     # -------------------------------------------------------------------------------
-    dist_label = Label(frame1,bg='grey', text='Date', font=('times new roman', 20, 'bold'))
-    dist_label.grid(row=6, column=0, padx=30, pady=15, sticky=W)
+    dist_label = Label(frame1,bg='grey', text='Date', font=('times new roman', 15, 'bold'))
+    dist_label.grid(row=7, column=0, padx=30, pady=15, sticky=W)
     dist_Entry = Entry(frame1,foreground='black', font=('Consolas', 15, 'bold'), width=24)
-    dist_Entry.grid(row=6, column=1, pady=15, padx=10)
+    dist_Entry.grid(row=7, column=1, pady=15, padx=10)
 
-    contBut = ttk.Button(frame1, text="Continue", command=Pay,width=20)
+    seno_label = Label(frame1, bg='grey', text='Seat_no', font=('times new roman', 15, 'bold'))
+    seno_label.grid(row=8, column=0, padx=30, pady=15, sticky=W)
+    seno_Entry = Entry(frame1, foreground='black', font=('Consolas', 15, 'bold'), width=24)
+    seno_Entry.grid(row=8, column=1, pady=15, padx=10)
+
+
+    usna_label = Label(frame1, bg='grey', text='Username', font=('times new roman', 15, 'bold'))
+    usna_label.grid(row=9, column=0, padx=30, pady=15, sticky=W)
+    usna_Entry = Entry(frame1, foreground='black', font=('Consolas', 15, 'bold'), width=24)
+    usna_Entry.grid(row=9, column=1, pady=15, padx=10)
+
+
+    contBut = ttk.Button(frame1, text="Continue", command=lambda:Pay(ghi,pnrno),width=20)
     contBut.grid(row=2,column=3,pady=15,padx=100)
 
     bckBut = ttk.Button(frame1, text="Back", command=Pay, width=20)
     bckBut.grid(row=4, column=3, pady=15, padx=100)
    # *******************************************************************************
 
-
-
-
+    pnr_Entry.insert(0, pnrno)
     No_Entry.insert(0, listdata[0])
     Tn_Entry.insert(0, listdata[1])
     src_Entry.insert(0, listdata[2])
@@ -103,7 +203,10 @@ def jhi():
     at_Entry.insert(0, listdata[4])
     dt_Entry.insert(0, listdata[5])
     dist_Entry.insert(0, listdata[6])
+    seno_Entry.insert(0,listdata[7])
+    usna_Entry.insert(0, unams)
 
+    pnr_Entry.config(state=DISABLED)
     No_Entry.config(state=DISABLED)
     Tn_Entry.config(state=DISABLED)
     src_Entry.config(state=DISABLED)
@@ -111,6 +214,8 @@ def jhi():
     at_Entry.config(state=DISABLED)
     dt_Entry.config(state=DISABLED)
     dist_Entry.config(state=DISABLED)
+    seno_Entry.config(state=DISABLED)
+    usna_Entry.config(state=DISABLED)
 
 
     # Run the main loop
@@ -134,15 +239,27 @@ def BookTick():
         cont_win.geometry('600x550')
         cont_win.grab_set()
 
-        subm_button=Button(cont_win,text='Generate ticket',command=jhi)
-        subm_button.pack()
+        seat_label = Label(cont_win, bg='grey', text='Select number of seats', font=('times new roman', 20, 'bold'))
+        seat_label.grid(row=1, column=0, padx=30, pady=15, sticky=W)
+        seat_Entry = Entry(cont_win, foreground='black', font=('Consolas', 15, 'bold'), width=24)
+        seat_Entry.grid(row=1, column=1, pady=15, padx=10)
+
+
+
+        user_label = Label(cont_win, bg='grey', text='Enter Username', font=('times new roman', 20, 'bold'))
+        user_label.grid(row=2, column=0, padx=30, pady=15, sticky=W)
+        user_Entry = Entry(cont_win, foreground='black', font=('Consolas', 15, 'bold'), width=24)
+        user_Entry.grid(row=2, column=1, pady=15, padx=10)
+
+        subm_button=Button(cont_win,text='Generate ticket',command=lambda:jhi(user_Entry.get(),seat_Entry.get()))
+        subm_button.grid(row=4,column=0)
 
 
 
 
     global  update_win
     update_win = Toplevel()
-    update_win.title("Update Train")
+    update_win.title("Train Details")
     update_win.resizable(False, False)
     update_win.grab_set()
 
@@ -205,6 +322,17 @@ def BookTick():
     dt_Entry.insert(0, listdata[5])
     dist_Entry.insert(0, listdata[6])
     sa_Entry.insert(0, listdata[7])
+
+
+    No_Entry.config(state=DISABLED)
+    Tn_Entry.config(state=DISABLED)
+    src_Entry.config(state=DISABLED)
+    dest_Entry.config(state=DISABLED)
+    at_Entry.config(state=DISABLED)
+    dt_Entry.config(state=DISABLED)
+    dist_Entry.config(state=DISABLED)
+    sa_Entry.config(state=DISABLED)
+
 
 
 
@@ -387,7 +515,7 @@ def search_train():
 
 
 
-# fns
+# # fns
 def clock():
     date = time.strftime('%d/%m/%Y')
     curr_time = time.strftime('%H:%M:%S')
